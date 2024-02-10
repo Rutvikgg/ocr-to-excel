@@ -18,7 +18,11 @@ This project aims to automate the process of extracting text from images or scan
    ```bash
    pip install pytesseract
    pip install openpyxl
-   pip install ovencv
+   pip install ﻿et-xmlfile
+   pip install numpy
+   pip install opencv-python
+   pip install packaging
+   pip install pillow
    ```
 
 ## Usage
