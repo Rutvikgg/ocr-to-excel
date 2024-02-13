@@ -1,10 +1,15 @@
+"""
+This is where we implement our UI using tkinter
+This file has the View class
+"""
+
 import tkinter as tk
 from tkinter import filedialog
 
 class UploadFile:
     def __init__(self, root):
         self.root = root
-        self.root.title("Invoice Data Extraction into Excel using OCR")
+        self.root.title("Invoice Data Extraction into Excel Using OCR")
         self.root.geometry("700x400")
 
         # Variable to store file location
