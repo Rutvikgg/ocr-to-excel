@@ -1,6 +1,6 @@
 from mindee import Client, PredictResponse, product
 import json
-
+from datetime import datetime
 
 # Init a new client
 mindee_client = Client(api_key="57f9525e3143c1bafb47b2db82ef5e79")
@@ -34,8 +34,17 @@ data = result.document.inference.prediction
 print(data.locale.country)
 print(data.locale.language)
 print(data.category.value)
-print(data.date.value)
-
+datetime_obj = datetime.strptime(data.date.value, "%Y-%m-%d")
+print(datetime_obj.strftime("%d-%m-%Y"))
+datetime_obj = datetime.strptime(data.time.value, "%H:%M")
+print(data.time.value)
+print(datetime_obj.strftime("%I:%M %p"))
+print(data.total_net.value)
+print(data.total_tax.value)
+print(data.total_amount.value)
+for tax in data.taxes:
+    print(type(tax.value))
+print(data.supplier_company_registrations)
 # Print the document-level summary
 
 
