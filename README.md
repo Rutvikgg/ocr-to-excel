@@ -33,7 +33,11 @@ Say goodbye to the manual data entry abyss! Our receipt management superhero is 
 
 **Ready to Join the Automation Party? 🎉**
 
-1. **Installation Magic:** Follow the enchanting steps in the Installation: #installation section.
+1. **Installation Magic:** Follow the enchanting steps in the Installation:
+   *Install Python dependencies:*
+   ```bash
+   pip install -r requirements.txt
+    ```
 2. **Execution Spell:** Toss your scanned receipts into the `input_images` folder and cast the spell:
    ```bash
    python ocr_to_excel.py
@@ -44,7 +48,7 @@ Say goodbye to the manual data entry abyss! Our receipt management superhero is 
 - Python (for automation and data manipulation) 🐍
 - Tesseract OCR (for text recognition) 👁️‍🗨️
 - Mindee API (for advanced layout analysis) 🌐
-- MySQL (for data storage) 🗃️
+- openpyxl (to read/write Excel xlsx/xlsm/xltx/xltm files) 🗃️
 - Tkinter (for GUI development) 🖥️
 
 **Contribute to the Spellbook:**
