@@ -9,8 +9,8 @@
 ## The Developers -
 ### [Rutvik P. Gondekar](https://github.com/Rutvikgg)   
 ### [Kamal D. Agrahari](https://github.com/kamalagrahari03) 
-### [Akash A. Nahak](https://github.com/ak2484) 
-### [Prabha S. Gawde](https://github.com/Prabha85) 
+### [Akash A. Nahak](https://github.com/ak2484)  
+### [Prabha S. Gawde](https://github.com/Prabha85)
 ---  
 
 **Tired of Drowning in Receipts? 🌊**
