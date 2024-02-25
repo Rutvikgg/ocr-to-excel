@@ -6,7 +6,7 @@ from PIL import ImageTk, Image
 
 root = Tk()
 root.title("OCR To Excel")
-# root.geometry("1920x1080")
+root.geometry("600x725")
 
 # root.iconbitmap("")
 def open():
@@ -17,7 +17,9 @@ def open():
     path_label = Label(frame, text=root.filename, borderwidth=2, relief="solid",anchor="w").grid(row=0, column=0, columnspan=2,
                                                                                       padx=5, pady=5, sticky="ew")
     #size_of_image will be 500x400
-    my_image = ImageTk.PhotoImage(Image.open(root.filename))
+    img = Image.open(root.filename)
+    my_image = ImageTk.PhotoImage(img.resize((500, 400)))
+    # my_image = ImageTk.PhotoImage(img)
     my_image_label = Label(inner_frame, image=my_image).grid(row=0, column=0)
 
 
@@ -29,7 +31,7 @@ separator1.grid(row=1, column=0, sticky="ew", columnspan=3)
 # def open() for choose_file
 choose_file_button = Button(root, text="Choose File", command=open, borderwidth=5, activebackground="lightgreen").grid(
     row=2, column=1, padx=5, pady=5)
-root.filename = "file path"
+root.filename = " Image path "
 
 upload_label = Label(root, text="Upload Your File", pady=10).grid(row=2, column=0, sticky="w")
 

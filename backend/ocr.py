@@ -1,8 +1,8 @@
 """
 This is where we use pytesseract to implement text extraction from images
 """
-import constants as c
-import functions as f
+import backend.constants as c
+import backend.functions as f
 from mindee import Client, PredictResponse, product
 
 
