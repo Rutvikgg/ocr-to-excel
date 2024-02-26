@@ -13,7 +13,7 @@ class OCR:
         pass
 
     @staticmethod
-    def ocr_receipt(receipt: str) -> dict:
+    def ocr_receipt(receipt: str) -> dict[str, dict | list | str | float]:
         input_doc = OCR.mindee_client.source_from_path(receipt)
         response: PredictResponse = OCR.mindee_client.parse(product.ReceiptV5, input_doc)
         result = response.document.inference.prediction
@@ -43,7 +43,7 @@ class OCR:
         return receipt_data
 
     @staticmethod
-    def ocr_invoice(invoice: str) -> dict:
+    def ocr_invoice(invoice: str) -> dict[str, dict | list | str | float]:
         input_doc = OCR.mindee_client.source_from_path(invoice)
         response: PredictResponse = OCR.mindee_client.parse(product.InvoiceV4, input_doc)
         result = response.document.inference.prediction
@@ -78,7 +78,7 @@ class OCR:
         return invoice_data
 
     @staticmethod
-    def ocr_fin_doc(fin_doc: str) -> dict:
+    def ocr_fin_doc(fin_doc: str) -> dict[str, dict | list | str | float]:
         input_doc = OCR.mindee_client.source_from_path(fin_doc)
         response: PredictResponse = OCR.mindee_client.parse(product.FinancialDocumentV1, input_doc)
         result = response.document.inference.prediction

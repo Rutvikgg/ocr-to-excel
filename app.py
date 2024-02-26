@@ -5,7 +5,7 @@ from frontend.view import View
 from backend.ocr import OCR
 
 
-def run():
+def run() -> None:
     print("App is Starting...")
     v = View()
     v.create_main_view()

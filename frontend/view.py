@@ -35,7 +35,7 @@ class View:
         self.heading_seperator = None
         self.primary_heading = None
 
-    def create_main_view(self):
+    def create_main_view(self) -> None:
         self.root.title(c.OCR_TITLE)
         self.root.geometry(c.MAIN_WINDOW_SIZE)
 
@@ -87,10 +87,10 @@ class View:
         self.start_btn = Button(self.root, text="Start Conversion", borderwidth=5, activebackground="lightgreen", command=self.start_conversion)
         self.start_btn.grid(row=11, column=2, columnspan=1, sticky="e", padx=10, pady=10)
 
-    def run_main_view(self):
+    def run_main_view(self) -> None:
         self.root.mainloop()
 
-    def open_file(self):
+    def open_file(self) -> None:
         self.filename = filedialog.askopenfilename(title=c.CHOOSE_FILE_DIALOG_TEXT)
         if self.filename.lower().endswith(".pdf"):
             pdf_document = fitz.open(self.filename)
@@ -104,11 +104,11 @@ class View:
         self.path_label.config(text=self.filename)
         self.image_label.config(image=self.image)
 
-    def get_radio_selection(self):
+    def get_radio_selection(self) -> str:
         return self.radio_selection.get()
 
-    def get_filename(self):
+    def get_filename(self) -> str:
         return self.filename
 
-    def start_conversion(self):
+    def start_conversion(self) -> None:
         self.root.quit()
