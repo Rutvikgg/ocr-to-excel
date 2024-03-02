@@ -5,6 +5,7 @@ This contains helper functions for ocr and excel reader & writer
 from datetime import datetime
 
 
+# Functions for OCR
 def format_date(date: str) -> str | None:
     try:
         datetime_obj = datetime.strptime(date, "%Y-%m-%d")
@@ -124,3 +125,32 @@ def retrieve_supplier_payment_details(supplier_payment_details: list) -> list[di
         return None
     else:
         return supplier_payment_details_list
+
+
+# Functions for Excel Writer
+def get_line_items(items):
+    formatted_list = []
+    for item in items:
+        product_code = item.get("product_code")
+        description = item.get("description")
+        quantity = item.get("quantity")
+        unit_price = item.get("unit_price")
+        total_amount = item.get("total_amount")
+        tax_rate = item.get("tax_rate")
+        tax_amount = item.get("tax_amount")
+        formatted_list.append([product_code, description, quantity, unit_price, total_amount, tax_rate, tax_amount])
+    return formatted_list
+
+
+def get_reg_info(reg_info):
+    str_list = []
+    for info in reg_info:
+        str_list.append(f'{info.get("type")}: {info.get("value")}')
+    return ", ".join(str_list)
+
+
+def get_payment_details(pay_details):
+    str_list = []
+    for info in pay_details:
+        str_list.append(f'iban: {info.get("iban")}, swift: {info.get("swift")}, acc_num: {info.get("account_number")}, rt_num: {info.get("routing_number")}')
+    return "; ".join(str_list)
