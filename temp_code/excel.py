@@ -1,12 +1,10 @@
-import openpyxl
-from openpyxl import Workbook, load_workbook
-from openpyxl.styles import Font
+from openpyxl import load_workbook
 
 workbook = load_workbook("../test_data/excel_test.xlsx")
 
 data = ["Name", "Address", "Contact"]
 data2 = ["Name", None, "Contact"]
-sheet = workbook["Line Items"]
+sheet = workbook["Names"]
 row = 3
 # workbook.create_sheet("Description")
 # sheet.title = "Line Items"
@@ -102,6 +100,6 @@ fin_doc_data = {
         }
     ]
 }
-items = list("RUTVIK")
-for idx, item in enumerate(items[1:]):
-    print(idx+2, item)
+# items = list("RUTVIK")
+# for idx, item in enumerate(items[1:]):
+#     print(idx+2, item)

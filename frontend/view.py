@@ -12,7 +12,7 @@ import frontend.constants as c
 
 
 class View:
-    def __init__(self):
+    def __init__(self) -> None:
         self.root = Tk()
         self.filename = c.IMAGE_PATH_PLACEHOLDER
         self.image = ImageTk.PhotoImage(Image.open("frontend/images/image_placeholder.jpg"))
