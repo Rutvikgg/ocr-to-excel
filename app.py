@@ -1,8 +1,8 @@
 """
 This is the main file where the app will start.
 """
-from frontend.view import View
 from backend.ocr import OCR
+from frontend.view import View
 
 
 def run() -> None:

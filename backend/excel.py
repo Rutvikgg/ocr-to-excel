@@ -2,35 +2,28 @@
 This is where we implement excel functionality
 """
 
-from openpyxl.workbook import Workbook
+from openpyxl import Workbook, load_workbook
+
 import backend.constants as c
 import backend.functions as f
 
 
 class ExcelWriter:
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     @staticmethod
-    def create_wb(data: dict, save_location: str | None = None):
-        wb = Workbook()
-        sheet = wb.active
-        sheet.title = c.DEFAULT_SHEET_TITLE
+    def create_wb(data: dict, save_location: str | None = None) -> None:
+        # Creating workbook
+        workbook = Workbook()
+        sheet = workbook.active
+        sheet.title = c.SINGLE_SHEET_TITLE
 
         # Adding heading for columns
-        for i, heading in enumerate(c.SINGLE_SHEET_HEADERS, 1):
-            cell = sheet.cell(3, i)
-            cell.value = heading
-            cell.font = c.BOLD_FONT
+        f.add_headers([sheet], [c.SINGLE_SHEET_HEADERS])
 
         # Cell formatting
-        for col in sheet.iter_cols():
-            max_length = 0
-            for cell in col:
-                if cell.value is None:
-                    continue
-                max_length = max(max_length, len(cell.value))
-            sheet.column_dimensions[col[0].column_letter].width = max_length + 1
+        f.format_cell_width(sheet)
 
         # Adding Data
         line_items = f.get_line_items(data.get("line_items"))
@@ -40,10 +33,12 @@ class ExcelWriter:
                        data.get("locale", {}).get("currency"),
                        data.get("document_type"),
                        data.get("invoice_number"),
+                       f.get_ref_nums(data.get("reference_numbers")),
                        data.get("due_date"),
                        data.get("total_net"),
                        data.get("total_tax"),
                        data.get("total_amount"),
+                       data.get("tip"),
                        line_items[0][0],
                        line_items[0][1],
                        line_items[0][2],
@@ -55,105 +50,204 @@ class ExcelWriter:
                        data.get("supplier", {}).get("phone_number"),
                        data.get("supplier", {}).get("address"),
                        f.get_reg_info(data.get("supplier", {}).get("reg_info")),
-                       f.get_payment_details(data.get("supplier", {}).get("payment_details"))]
+                       f.get_payment_details(data.get("supplier", {}).get("payment_details")),
+                       data.get("customer", {}).get("name"),
+                       data.get("customer", {}).get("address"),
+                       f.get_reg_info(data.get("customer", {}).get("reg_info"))]
         sheet.append(append_list)
+
         for idx, item in enumerate(line_items[1:]):
-            sheet.cell(row=idx + 5, column=11).value = item[0]
-            sheet.cell(row=idx + 5, column=12).value = item[1]
-            sheet.cell(row=idx + 5, column=13).value = item[2]
-            sheet.cell(row=idx + 5, column=14).value = item[3]
-            sheet.cell(row=idx + 5, column=15).value = item[4]
-            sheet.cell(row=idx + 5, column=16).value = item[5]
-            sheet.cell(row=idx + 5, column=17).value = item[6]
+            sheet.cell(row=idx + 5, column=13).value = item[0]
+            sheet.cell(row=idx + 5, column=14).value = item[1]
+            sheet.cell(row=idx + 5, column=15).value = item[2]
+            sheet.cell(row=idx + 5, column=16).value = item[3]
+            sheet.cell(row=idx + 5, column=17).value = item[4]
+            sheet.cell(row=idx + 5, column=18).value = item[5]
+            sheet.cell(row=idx + 5, column=19).value = item[6]
 
         # Saving worksheet
-        wb.save(save_location)
+        workbook.save(save_location)
 
     @staticmethod
-    def create_wb_sheeted(data, save_location=None):
-        pass
+    def create_multi_sheet_wb(data: dict, save_location: str | None = None) -> None:
+        # Creating workbook and sheets
+        workbook = Workbook()
+        main_info_sheet = workbook.active
+        main_info_sheet.title = c.MULTI_SHEET_TITLES[0]
+        supplier_info_sheet = workbook.create_sheet(c.MULTI_SHEET_TITLES[1])
+        customer_info_sheet = workbook.create_sheet(c.MULTI_SHEET_TITLES[2])
+        line_items_sheet = workbook.create_sheet(c.MULTI_SHEET_TITLES[3])
+
+        # Adding heading for columns in sheets
+        f.add_headers([main_info_sheet, supplier_info_sheet, customer_info_sheet, line_items_sheet],
+                      [c.MAIN_SHEET_HEADERS, c.SUPPLIER_SHEET_HEADERS, c.CUSTOMER_SHEET_HEADERS,
+                       c.LINE_ITEMS_SHEET_HEADERS])
+
+        # Cell formatting
+        f.format_cell_width(main_info_sheet, supplier_info_sheet, customer_info_sheet, line_items_sheet)
+
+        # Adding Data
+        main_info_sheet.append([data.get("date"),
+                                data.get("time"),
+                                data.get("locale", {}).get("language"),
+                                data.get("locale", {}).get("currency"),
+                                data.get("document_type"),
+                                data.get("invoice_number"),
+                                f.get_ref_nums(data.get("reference_numbers")),
+                                data.get("due_date"),
+                                data.get("total_net"),
+                                data.get("total_tax"),
+                                data.get("total_amount"),
+                                data.get("tip")])
+
+        supplier_info_sheet.append([data.get("invoice_number"),
+                                    f.get_payment_details(data.get("supplier", {}).get("payment_details")),
+                                    data.get("supplier", {}).get("name"),
+                                    data.get("supplier", {}).get("address"),
+                                    data.get("supplier", {}).get("phone_number"),
+                                    f.get_reg_info(data.get("supplier", {}).get("reg_info"))])
+
+        customer_info_sheet.append([data.get("invoice_number"),
+                                    data.get("customer", {}).get("name"),
+                                    data.get("customer", {}).get("address"),
+                                    f.get_reg_info(data.get("customer", {}).get("reg_info"))])
+
+        line_items = f.get_line_items(data.get("line_items"))
+        line_items_sheet.append([data.get("invoice_number"),
+                                 line_items[0][0],
+                                 line_items[0][1],
+                                 line_items[0][2],
+                                 line_items[0][3],
+                                 line_items[0][4],
+                                 line_items[0][5],
+                                 line_items[0][6]])
+        for idx, item in enumerate(line_items[1:]):
+            line_items_sheet.cell(row=idx + 5, column=2).value = item[0]
+            line_items_sheet.cell(row=idx + 5, column=3).value = item[1]
+            line_items_sheet.cell(row=idx + 5, column=4).value = item[2]
+            line_items_sheet.cell(row=idx + 5, column=5).value = item[3]
+            line_items_sheet.cell(row=idx + 5, column=6).value = item[4]
+            line_items_sheet.cell(row=idx + 5, column=7).value = item[5]
+            line_items_sheet.cell(row=idx + 5, column=8).value = item[6]
+
+        # Saving workbook
+        workbook.save(save_location)
 
     @staticmethod
-    def append_wb(data, workbook, save_location=None):
-        pass
+    def append_wb(data: dict, wb_location: str, save_location: str | None = None) -> None:
+        workbook = load_workbook(wb_location)
+        try:
+            sheet = workbook[c.SINGLE_SHEET_TITLE]
+        except KeyError:
+            sheet = workbook.create_sheet(c.SINGLE_SHEET_TITLE)
+
+        # Adding Data
+        line_items = f.get_line_items(data.get("line_items"))
+        append_list = [data.get("date"),
+                       data.get("time"),
+                       data.get("locale", {}).get("language"),
+                       data.get("locale", {}).get("currency"),
+                       data.get("document_type"),
+                       data.get("invoice_number"),
+                       f.get_ref_nums(data.get("reference_numbers")),
+                       data.get("due_date"),
+                       data.get("total_net"),
+                       data.get("total_tax"),
+                       data.get("total_amount"),
+                       data.get("tip"),
+                       line_items[0][0],
+                       line_items[0][1],
+                       line_items[0][2],
+                       line_items[0][3],
+                       line_items[0][4],
+                       line_items[0][5],
+                       line_items[0][6],
+                       data.get("supplier", {}).get("name"),
+                       data.get("supplier", {}).get("phone_number"),
+                       data.get("supplier", {}).get("address"),
+                       f.get_reg_info(data.get("supplier", {}).get("reg_info")),
+                       f.get_payment_details(data.get("supplier", {}).get("payment_details")),
+                       data.get("customer", {}).get("name"),
+                       data.get("customer", {}).get("address"),
+                       f.get_reg_info(data.get("customer", {}).get("reg_info"))]
+        sheet.append(append_list)
+        max_row = sheet.max_row
+        for idx, item in enumerate(line_items[1:]):
+            sheet.cell(row=idx + max_row + 1, column=13).value = item[0]
+            sheet.cell(row=idx + max_row + 1, column=14).value = item[1]
+            sheet.cell(row=idx + max_row + 1, column=15).value = item[2]
+            sheet.cell(row=idx + max_row + 1, column=16).value = item[3]
+            sheet.cell(row=idx + max_row + 1, column=17).value = item[4]
+            sheet.cell(row=idx + max_row + 1, column=18).value = item[5]
+            sheet.cell(row=idx + max_row + 1, column=19).value = item[6]
+
+            # Saving workbook
+            if save_location is None:
+                workbook.save(wb_location)
+            else:
+                workbook.save(save_location)
 
     @staticmethod
-    def append_wb_sheeted(data, workbook, save_location=None):
-        pass
+    def append_multi_sheet_wb(data: dict, wb_location: str, save_location: str | None = None) -> None:
+        workbook = load_workbook(wb_location)
+        try:
+            main_info_sheet = workbook[c.MULTI_SHEET_TITLES[0]]
+            supplier_info_sheet = workbook[c.MULTI_SHEET_TITLES[1]]
+            customer_info_sheet = workbook[c.MULTI_SHEET_TITLES[2]]
+            line_items_sheet = workbook[c.MULTI_SHEET_TITLES[3]]
+        except KeyError:
+            main_info_sheet = workbook.create_sheet(c.MULTI_SHEET_TITLES[0])
+            supplier_info_sheet = workbook.create_sheet(c.MULTI_SHEET_TITLES[1])
+            customer_info_sheet = workbook.create_sheet(c.MULTI_SHEET_TITLES[2])
+            line_items_sheet = workbook.create_sheet(c.MULTI_SHEET_TITLES[3])
 
+        # Adding Data
+        main_info_sheet.append([data.get("date"),
+                                data.get("time"),
+                                data.get("locale", {}).get("language"),
+                                data.get("locale", {}).get("currency"),
+                                data.get("document_type"),
+                                data.get("invoice_number"),
+                                f.get_ref_nums(data.get("reference_numbers")),
+                                data.get("due_date"),
+                                data.get("total_net"),
+                                data.get("total_tax"),
+                                data.get("total_amount"),
+                                data.get("tip")])
 
-fin_doc_data = {
-    "document_type": "Expense Receipt",
-    "locale": {
-        "language": "en",
-        "currency": "INR"
-    },
-    "invoice_number": 80456,
-    "reference_numbers": ["AP10256", "UN5847", "AT548R"],
-    "date": "02-03-2024",
-    "time": "08:05 PM",
-    "due_date": "06-04-2024",
-    "total_net": 42000,
-    "total_tax": 456.23,
-    "total_amount": 42456.23,
-    "tip": None,
-    "taxes": [{"value": 456, "rate": 3.5}, {"value": 456, "rate": 3.5}],
-    "supplier": {
-        "payment_details": [{
-            "iban": " GB29 NWBK 6016 1331 9268 19",
-            "swift": "NWBKGB2L",
-            "account_number": 1234567890,
-            "routing_number": 123456789
-        }, {
-            "iban": " GB29 NWBK 6016 1331 9268 19",
-            "swift": "NWBKGB2L",
-            "account_number": 3658974106,
-            "routing_number": 12569843
-        }],
-        "name": "John Doe Enterprises",
-        "reg_info": [{
-            "type": "Fake Business Registry",
-            "value": "ABC123456"
-        }],
-        "address": "123 Fake Street, Faketown, FK1234",
-        "phone_number": "+1 (555) 123-4567"
-    },
-    "customer": {
-        "name": "Jane Smith Co.",
-        "reg_info": [{
-            "type": "Fake Business Registry",
-            "value": "ABC123456"
-        }],
-        "address": "456 Imaginary Avenue, Fantasyville, FA5678"
-    },
-    "line_items": [
-        {
-            "product_code": "PRD001",
-            "description": "Widget A",
-            "quantity": 10,
-            "unit_price": 25.99,
-            "total_amount": 259.90,
-            "tax_rate": 0.1,
-            "tax_amount": 25.99
-        },
-        {
-            "product_code": "PRD002",
-            "description": "Widget B",
-            "quantity": 5,
-            "unit_price": 15.49,
-            "total_amount": 77.45,
-            "tax_rate": 0.08,
-            "tax_amount": 6.20
-        },
-        {
-            "product_code": "PRD003",
-            "description": "Widget C",
-            "quantity": 20,
-            "unit_price": 8.75,
-            "total_amount": 175.00,
-            "tax_rate": 0.05,
-            "tax_amount": 8.75
-        }
-    ]
-}
-ExcelWriter.create_wb(fin_doc_data, "../test_data/excel_main_test.xlsx")
+        supplier_info_sheet.append([data.get("invoice_number"),
+                                    f.get_payment_details(data.get("supplier", {}).get("payment_details")),
+                                    data.get("supplier", {}).get("name"),
+                                    data.get("supplier", {}).get("address"),
+                                    data.get("supplier", {}).get("phone_number"),
+                                    f.get_reg_info(data.get("supplier", {}).get("reg_info"))])
+
+        customer_info_sheet.append([data.get("invoice_number"),
+                                    data.get("customer", {}).get("name"),
+                                    data.get("customer", {}).get("address"),
+                                    f.get_reg_info(data.get("customer", {}).get("reg_info"))])
+
+        line_items = f.get_line_items(data.get("line_items"))
+        line_items_sheet.append([data.get("invoice_number"),
+                                 line_items[0][0],
+                                 line_items[0][1],
+                                 line_items[0][2],
+                                 line_items[0][3],
+                                 line_items[0][4],
+                                 line_items[0][5],
+                                 line_items[0][6]])
+        max_row = line_items_sheet.max_row
+        for idx, item in enumerate(line_items[1:]):
+            line_items_sheet.cell(row=idx + max_row + 1, column=2).value = item[0]
+            line_items_sheet.cell(row=idx + max_row + 1, column=3).value = item[1]
+            line_items_sheet.cell(row=idx + max_row + 1, column=4).value = item[2]
+            line_items_sheet.cell(row=idx + max_row + 1, column=5).value = item[3]
+            line_items_sheet.cell(row=idx + max_row + 1, column=6).value = item[4]
+            line_items_sheet.cell(row=idx + max_row + 1, column=7).value = item[5]
+            line_items_sheet.cell(row=idx + max_row + 1, column=8).value = item[6]
+
+        # Saving workbook
+        if save_location is None:
+            workbook.save(wb_location)
+        else:
+            workbook.save(save_location)

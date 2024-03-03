@@ -1,8 +1,12 @@
 """
 This contains helper functions for ocr and excel reader & writer
 """
-
 from datetime import datetime
+from typing import List, Any
+
+from openpyxl.worksheet.worksheet import Worksheet
+
+import backend.constants as c
 
 
 # Functions for OCR
@@ -128,7 +132,33 @@ def retrieve_supplier_payment_details(supplier_payment_details: list) -> list[di
 
 
 # Functions for Excel Writer
-def get_line_items(items):
+def add_headers(sheets: list[Worksheet], headers_list: list[tuple]) -> None:
+    for s, sheet in enumerate(sheets):
+        for i, heading in enumerate(headers_list[s], 1):
+            cell = sheet.cell(3, i)
+            cell.value = heading
+            cell.font = c.BOLD_FONT
+
+
+def format_cell_width(*sheets: Worksheet) -> None:
+    for sheet in sheets:
+        for col in sheet.iter_cols():
+            max_length = 0
+            for cell in col:
+                if cell.value is None:
+                    continue
+                max_length = max(max_length, len(cell.value))
+            sheet.column_dimensions[col[0].column_letter].width = max_length + 2
+
+
+def get_ref_nums(ref_nums: list[str]) -> str | None:
+    try:
+        return ", ".join(ref_nums)
+    except TypeError:
+        return None
+
+
+def get_line_items(items: list[dict]) -> list[list[Any | None]]:
     formatted_list = []
     for item in items:
         product_code = item.get("product_code")
@@ -142,15 +172,22 @@ def get_line_items(items):
     return formatted_list
 
 
-def get_reg_info(reg_info):
-    str_list = []
-    for info in reg_info:
-        str_list.append(f'{info.get("type")}: {info.get("value")}')
-    return ", ".join(str_list)
+def get_reg_info(reg_info: list[dict]) -> str | None:
+    try:
+        str_list = []
+        for info in reg_info:
+            str_list.append(f'{info.get("type")}: {info.get("value")}')
+        return ", ".join(str_list)
+    except TypeError:
+        return None
 
 
-def get_payment_details(pay_details):
-    str_list = []
-    for info in pay_details:
-        str_list.append(f'iban: {info.get("iban")}, swift: {info.get("swift")}, acc_num: {info.get("account_number")}, rt_num: {info.get("routing_number")}')
-    return "; ".join(str_list)
+def get_payment_details(pay_details) -> str | None:
+    try:
+        str_list = []
+        for info in pay_details:
+            str_list.append(
+                f'iban: {info.get("iban")}, swift: {info.get("swift")}, acc_num: {info.get("account_number")}, rt_num: {info.get("routing_number")}')
+        return "; ".join(str_list)
+    except TypeError:
+        return None
