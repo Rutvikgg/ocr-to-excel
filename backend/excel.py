@@ -22,9 +22,6 @@ class ExcelWriter:
         # Adding heading for columns
         f.add_headers([sheet], [c.SINGLE_SHEET_HEADERS])
 
-        # Cell formatting
-        f.format_cell_width(sheet)
-
         # Adding Data
         line_items = f.get_line_items(data.get("line_items"))
         append_list = [data.get("date"),
@@ -65,6 +62,9 @@ class ExcelWriter:
             sheet.cell(row=idx + 5, column=18).value = item[5]
             sheet.cell(row=idx + 5, column=19).value = item[6]
 
+        # Cell formatting
+        f.format_cell_width(sheet)
+
         # Saving worksheet
         workbook.save(save_location)
 
@@ -82,9 +82,6 @@ class ExcelWriter:
         f.add_headers([main_info_sheet, supplier_info_sheet, customer_info_sheet, line_items_sheet],
                       [c.MAIN_SHEET_HEADERS, c.SUPPLIER_SHEET_HEADERS, c.CUSTOMER_SHEET_HEADERS,
                        c.LINE_ITEMS_SHEET_HEADERS])
-
-        # Cell formatting
-        f.format_cell_width(main_info_sheet, supplier_info_sheet, customer_info_sheet, line_items_sheet)
 
         # Adding Data
         main_info_sheet.append([data.get("date"),
@@ -130,8 +127,20 @@ class ExcelWriter:
             line_items_sheet.cell(row=idx + 5, column=7).value = item[5]
             line_items_sheet.cell(row=idx + 5, column=8).value = item[6]
 
+        # Cell formatting
+        f.format_cell_width(main_info_sheet, supplier_info_sheet, customer_info_sheet, line_items_sheet)
+
         # Saving workbook
         workbook.save(save_location)
+
+    @staticmethod
+    def is_wb_single_sheet(wb_location):
+        workbook = load_workbook(wb_location)
+        sheets = workbook.sheetnames
+        if c.SINGLE_SHEET_TITLE in sheets:
+            return True
+        else:
+            return False
 
     @staticmethod
     def append_wb(data: dict, wb_location: str, save_location: str | None = None) -> None:
@@ -181,11 +190,14 @@ class ExcelWriter:
             sheet.cell(row=idx + max_row + 1, column=18).value = item[5]
             sheet.cell(row=idx + max_row + 1, column=19).value = item[6]
 
-            # Saving workbook
-            if save_location is None:
-                workbook.save(wb_location)
-            else:
-                workbook.save(save_location)
+        # Cell formatting
+        f.format_cell_width(sheet)
+
+        # Saving workbook
+        if save_location is None:
+            workbook.save(wb_location)
+        else:
+            workbook.save(save_location)
 
     @staticmethod
     def append_multi_sheet_wb(data: dict, wb_location: str, save_location: str | None = None) -> None:
@@ -245,6 +257,9 @@ class ExcelWriter:
             line_items_sheet.cell(row=idx + max_row + 1, column=6).value = item[4]
             line_items_sheet.cell(row=idx + max_row + 1, column=7).value = item[5]
             line_items_sheet.cell(row=idx + max_row + 1, column=8).value = item[6]
+
+        # Cell formatting
+        f.format_cell_width(main_info_sheet, supplier_info_sheet, customer_info_sheet, line_items_sheet)
 
         # Saving workbook
         if save_location is None:

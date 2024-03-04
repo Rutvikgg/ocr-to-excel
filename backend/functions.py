@@ -2,7 +2,7 @@
 This contains helper functions for ocr and excel reader & writer
 """
 from datetime import datetime
-from typing import List, Any
+from typing import Any
 
 from openpyxl.worksheet.worksheet import Worksheet
 
@@ -147,7 +147,7 @@ def format_cell_width(*sheets: Worksheet) -> None:
             for cell in col:
                 if cell.value is None:
                     continue
-                max_length = max(max_length, len(cell.value))
+                max_length = max(max_length, len(str(cell.value)))
             sheet.column_dimensions[col[0].column_letter].width = max_length + 2
 
 

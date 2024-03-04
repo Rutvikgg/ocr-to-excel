@@ -8,7 +8,7 @@ root = Tk()
 root.title("OCR To Excel")
 root.geometry("600x725")
 
-# root.iconbitmap("")
+# main_ui_root.iconbitmap("")
 def open():
     global my_image
     global my_image_label
@@ -50,7 +50,7 @@ separator_frame.grid(row=1, column=0, sticky="ew", columnspan=3, pady=10)
 inner_frame = LabelFrame(frame, bg="#88d4ab", borderwidth=1)
 inner_frame.grid(row=2, column=0, columnspan=3)
 
-# my_button=Button(frame,text="Open file").grid(row=0,column=0, pady=10)
+# my_button=Button(image_preview_frame,text="Open file").grid(row=0,column=0, pady=10)
 
 separator3 = ttk.Separator(root, orient="horizontal")
 separator3.grid(row=6, column=0, sticky="ew", columnspan=3)

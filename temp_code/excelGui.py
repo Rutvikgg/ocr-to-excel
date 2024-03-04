@@ -35,20 +35,20 @@ rad_btn2 = Radiobutton(root, text="Add Data to existing file", variable=selectio
 
 rad_btn1.select()
 #if rad_btn1 is clicked
-# label_saving_format =Label(root, text="Select Saving Format", anchor=E).grid(row=6, column=0, sticky="w")
+# label_saving_format =Label(main_ui_root, text="Select Saving Format", anchor=E).grid(row=6, column=0, sticky="w")
 #
 # selection = StringVar()
 #
-# rad_btn_1 = Radiobutton(root, text="Single Sheet(for mass evaluation)", variable=selection, value="fd")
+# rad_btn_1 = Radiobutton(main_ui_root, text="Single Sheet(for mass evaluation)", variable=selection, value="fd")
 # rad_btn_1.grid(row=7, column=0, sticky="w",padx=5)
-# rad_btn_2 = Radiobutton(root, text="Multiple Sheet(Cleaner format for user view)", variable=selection, value="er").grid(row=7, column=1, sticky="w",padx=5)
+# rad_btn_2 = Radiobutton(main_ui_root, text="Multiple Sheet(Cleaner format for user view)", variable=selection, value="er").grid(row=7, column=1, sticky="w",padx=5)
 # rad_btn_1.select()
 #
-# label_enter_filename =Label(root, text="Select Saving Format", anchor=E).grid(row=8, column=0, sticky="w")
-# entry_filename = Entry(root, width=50, borderwidth=5).grid(row=9, column=0, sticky="w",padx=5, columnspan=2)
+# label_enter_filename =Label(main_ui_root, text="Select Saving Format", anchor=E).grid(row=8, column=0, sticky="w")
+# entry_filename = Entry(main_ui_root, width=50, borderwidth=5).grid(row=9, column=0, sticky="w",padx=5, columnspan=2)
 #
-# label_select_save_location =Label(root, text="Select Save Location", anchor=E).grid(row=10, column=0, sticky="w")
-# button_browse_folder = Button(root, text="Browse Folder", command=open, borderwidth=5, activebackground="lightgreen").grid(
+# label_select_save_location =Label(main_ui_root, text="Select Save Location", anchor=E).grid(row=10, column=0, sticky="w")
+# button_browse_folder = Button(main_ui_root, text="Browse Folder", command=open, borderwidth=5, activebackground="lightgreen").grid(
 #     row=10, column=1, padx=5, pady=5)
 
 #if rad_btn2 is clicked
