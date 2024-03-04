@@ -31,7 +31,7 @@ def retrieve_taxes_receipt(taxes: list) -> list[dict[str, float | str]] | None:
     for tax in taxes:
         tax_list.append({
             "value": tax.value,
-            "base": tax.base,
+            "base": tax.basis,
             "rate": tax.rate,
             "code": tax.code
         })

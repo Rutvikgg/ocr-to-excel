@@ -1,15 +1,17 @@
 """
 This is the main file where the app will start.
 """
+import time
+
 from backend.ocr import OCR
-from frontend.view import View
+from frontend.view import MainView, ExcelView
 
 
 def run() -> None:
     print("App is Starting...")
 
     # Main GUI start
-    v = View()
+    v = MainView()
     v.create_main_view()
     v.run_main_view()
     print(v.get_file_for_ocr())
@@ -30,7 +32,9 @@ def run() -> None:
         print("App closed!")
 
     # Excel GUI start
-
+    # v = ExcelView()
+    # v.create_excel_view()
+    # v.run_excel_view()
     # Converting Data into Excel
     """
     Example code
@@ -47,5 +51,10 @@ def run() -> None:
     """
 
 
-if __name__ == '__main__':
-    run()
+v = ExcelView()
+v.create_excel_view()
+v.run_excel_view()
+
+
+# if __name__ == '__main__':
+#     run()

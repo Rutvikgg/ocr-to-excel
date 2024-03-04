@@ -1,16 +1,17 @@
 """
-Constants for use in View
+Constants for use in MainView
 """
 
 # UI scale
 MAIN_WINDOW_SIZE: str = "600x725"
+EXCEL_WINDOW_SIZE: str = "600x600"
 IMAGE_SIZE: tuple[int, int] = (500, 400)
 
 # colors
 IMAGE_FRAME_COLOR: str = "#88D4AB"
 WARNING_TEXT_COLOR: str = "#FF0F0F"
 
-# String used in UI
+# String used in Main GUI
 OCR_TITLE: str = "Ocr to Excel"
 MAIN_UI_PRIMARY_HEADING: str = "OCR Your Document"
 DOCUMENT_CHOOSE_BTN_TEXT: str = "Choose File"

@@ -53,7 +53,6 @@ class OCR:
                 "language": result.locale.language,
                 "currency": result.locale.currency
             },
-            "category": result.category.value,
             "invoice_number": result.invoice_number.value,
             "reference_numbers": f.retrieve_reference_number(result.reference_numbers),
             "date": f.format_date(result.date.value),
