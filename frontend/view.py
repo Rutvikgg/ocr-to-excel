@@ -2,6 +2,7 @@
 This is where we implement our UI using tkinter
 This file has the MainView class
 """
+import os
 from pathlib import Path
 from tkinter import Tk, Label, ttk, Button, filedialog, LabelFrame, StringVar, Radiobutton, IntVar, Entry, Frame
 from tkinter.constants import E, W
@@ -172,6 +173,7 @@ class ExcelView:
         self.save_option_seperator = None
         documents_path = Path.home() / "Documents"
         self.folder_path = str(documents_path)
+        self.new_folder_path = None
         self.save_btn = None
         self.excel_ui_warning_label = None
 
@@ -259,7 +261,7 @@ class ExcelView:
         self.browse_folder_btn = Button(self.append_option_frame, text="Browse Folder", borderwidth=5,
                                         activebackground="lightgreen", command=self.browse_folder)
         self.browse_folder_btn.grid(row=2, column=1, padx=5, pady=5)
-        self.new_save_location_path_label = Label(self.append_option_frame, text=self.folder_path, borderwidth=2,
+        self.new_save_location_path_label = Label(self.append_option_frame, text=self.new_folder_path, borderwidth=2,
                                                   relief="solid", anchor="w")
         self.new_save_location_path_label.grid(row=3, column=0, columnspan=2, padx=5, pady=5, sticky="ew")
 
@@ -279,11 +281,11 @@ class ExcelView:
             self.save_new_option_frame.grid_forget()
 
     def browse_folder(self):
-        self.folder_path = filedialog.askdirectory()
+        self.folder_path = self.new_folder_path = filedialog.askdirectory()
         if self.get_save_option_selection() == 1:
             self.save_location_path_label.config(text=self.folder_path)
         elif self.get_save_option_selection() == 2:
-            self.new_save_location_path_label.config(text=self.folder_path)
+            self.new_save_location_path_label.config(text=self.new_folder_path)
 
     def open_excel_file(self):
         self.excel_file = filedialog.askopenfilename(title="Select a File",
@@ -300,10 +302,23 @@ class ExcelView:
         return self.sheet_selection.get()
 
     def get_save_filename(self):
-        return self.save_filename
+        return self.save_filename.strip()
 
     def get_folder(self):
         return self.folder_path
+
+    def get_new_folder(self):
+        return self.new_folder_path
+
+    def get_save_location(self):
+        return f'{self.get_folder()}/{self.get_save_filename()}.xlsx'
+
+    def get_new_save_location(self):
+        if self.get_new_folder() is None:
+            return None
+        else:
+            file_name = os.path.basename(self.get_excel_file())
+            return f'{self.get_new_folder()}/{file_name}'
 
     def store_save_filename(self):
         self.save_filename = self.save_filename_field.get()
@@ -315,15 +330,15 @@ class ExcelView:
         if self.get_save_option_selection() == 1:
             if self.get_sheet_selection() == 1 or self.get_sheet_selection() == 2:
                 if self.get_save_filename().strip():
-                    pass
+                    self.excel_ui_root.destroy()
                 else:
                     self.excel_ui_warning_label.config(text="Please enter your filename before proceeding.")
             else:
                 self.excel_ui_warning_label.config(text="Please select a Saving Format to proceed!")
-
         elif self.get_save_option_selection() == 2:
-            pass
+            if self.get_excel_file() is None:
+                self.excel_ui_warning_label.config(text="Please select a excel file to append into.")
+            else:
+                self.excel_ui_root.destroy()
         else:
             self.excel_ui_warning_label.config(text="Please select a Save option to proceed!")
-        print(self.get_save_filename())
-        print(self.folder_path)
