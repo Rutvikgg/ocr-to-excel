@@ -4,8 +4,9 @@ This file has the MainView class
 """
 import os
 from pathlib import Path
-from tkinter import Tk, Label, ttk, Button, filedialog, LabelFrame, StringVar, Radiobutton, IntVar, Entry, Frame
-from tkinter.constants import E, W
+from tkinter import Tk, Label, ttk, Button, filedialog, LabelFrame, StringVar, Radiobutton, IntVar, Entry, Frame, \
+    messagebox
+from tkinter.constants import E
 
 from PIL import Image, ImageTk
 from fitz import fitz
@@ -38,6 +39,7 @@ class MainView:
         self.document_choose_file_btn = None
         self.main_ui_heading_seperator = None
         self.main_ui_primary_heading = None
+        self.main_ui_root.protocol("WM_DELETE_WINDOW", self.on_closing)
 
     def create_main_view(self) -> None:
         # Basic definitions of gui window
@@ -59,9 +61,9 @@ class MainView:
         self.document_choose_file_label_seperator = ttk.Separator(self.main_ui_root, orient="horizontal")
         self.document_choose_file_label_seperator.grid(row=4, column=0, sticky="ew", columnspan=3)
 
-        self.document_choose_file_btn = Button(self.main_ui_root, text=c.DOCUMENT_CHOOSE_BTN_TEXT,
+        self.document_choose_file_btn = Button(self.main_ui_root, text=c.CHOOSE_BTN_TEXT,
                                                command=self.open_file_for_ocr, borderwidth=5,
-                                               activebackground="lightgreen")
+                                               activebackground=c.BTN_ACTIVE_BG_COLOR)
         self.document_choose_file_btn.grid(row=2, column=1, padx=5, pady=5)
 
         # Image Preview
@@ -101,8 +103,8 @@ class MainView:
         self.document_radio_seperator.grid(row=10, column=0, sticky="ew", columnspan=3)
 
         # Start Button
-        self.start_btn = Button(self.main_ui_root, text="Start Conversion", borderwidth=5,
-                                activebackground="lightgreen", command=self.start_conversion)
+        self.start_btn = Button(self.main_ui_root, text=c.START_BTN_TEXT, borderwidth=5,
+                                activebackground=c.BTN_ACTIVE_BG_COLOR, command=self.start_conversion)
         self.start_btn.grid(row=11, column=2, columnspan=1, sticky="e", padx=10, pady=10)
 
         self.main_ui_warning_label = Label(self.main_ui_root, text="", fg=c.WARNING_TEXT_COLOR)
@@ -116,7 +118,7 @@ class MainView:
         self.main_ui_warning_label.config(text="")
 
         # File open and preview operation
-        self.file_for_ocr = filedialog.askopenfilename(title=c.DOCUMENT_CHOOSE_FILE_DIALOG_TEXT)
+        self.file_for_ocr = filedialog.askopenfilename(title=c.CHOOSE_FILE_DIALOG_TEXT)
         if self.file_for_ocr.lower().endswith(".pdf"):
             pdf_document = fitz.open(self.file_for_ocr)
             page = pdf_document.load_page(0)
@@ -141,6 +143,10 @@ class MainView:
             self.main_ui_warning_label.config(text=c.MAIN_UI_WARNING_TEXT)
         else:
             self.main_ui_root.destroy()  # Close the GUI
+
+    def on_closing(self):
+        if messagebox.askokcancel("Quit", "Do you want to quit?"):
+            self.main_ui_root.destroy()
 
 
 class ExcelView:
@@ -176,28 +182,29 @@ class ExcelView:
         self.new_folder_path = None
         self.save_btn = None
         self.excel_ui_warning_label = None
+        self.excel_ui_root.protocol("WM_DELETE_WINDOW", self.on_closing)
 
     def create_excel_view(self):
         self.excel_ui_root.title(c.OCR_TITLE)
         self.excel_ui_root.geometry(c.EXCEL_WINDOW_SIZE)
 
-        self.excel_primary_heading = Label(self.excel_ui_root, text="Excel Setting", anchor=E)
+        self.excel_primary_heading = Label(self.excel_ui_root, text=c.EXCEL_UI_PRIMARY_HEADING, anchor=E)
         self.excel_primary_heading.grid(row=0, column=0, sticky="w", pady=5)
 
         self.excel_primary_heading_seperator = ttk.Separator(self.excel_ui_root, orient="horizontal")
         self.excel_primary_heading_seperator.grid(row=1, column=0, sticky="ew", columnspan=2, pady=5)
 
-        self.success_msg_label = Label(self.excel_ui_root, text="Data Extracted Successfully!!!", anchor=E)
+        self.success_msg_label = Label(self.excel_ui_root, text=c.EXCEL_SUCCESS_MSG_TEXT, anchor=E)
         self.success_msg_label.grid(row=2, column=0, sticky="w")
 
-        self.save_option_label = Label(self.excel_ui_root, text="How Would you like to save it", anchor=E)
+        self.save_option_label = Label(self.excel_ui_root, text=c.SAVE_OPTION_TEXT, anchor=E)
         self.save_option_label.grid(row=3, column=0, sticky="w")
 
-        self.save_new_radio_btn = Radiobutton(self.excel_ui_root, text="Save to new file",
+        self.save_new_radio_btn = Radiobutton(self.excel_ui_root, text=c.SAVE_NEW_RADIO_BTN_TEXT,
                                               variable=self.save_option_selection, value=1,
                                               command=self.save_option_command)
         self.save_new_radio_btn.grid(row=4, column=0, sticky="w", padx=5)
-        self.append_radio_btn = Radiobutton(self.excel_ui_root, text="Add Data to existing file",
+        self.append_radio_btn = Radiobutton(self.excel_ui_root, text=c.APPEND_RADIO_BTN_TEXT,
                                             variable=self.save_option_selection, value=2,
                                             command=self.save_option_command)
         self.append_radio_btn.grid(row=5, column=0, sticky="w", padx=5)
@@ -212,61 +219,62 @@ class ExcelView:
 
         # Save in new file option
         self.save_new_option_frame = Frame(self.excel_ui_root)
-        self.saving_format_label = Label(self.save_new_option_frame, text="Select Saving Format", anchor=E)
+        self.saving_format_label = Label(self.save_new_option_frame, text=c.SAVING_FORMAT_TEXT, anchor=E)
         self.saving_format_label.grid(row=0, column=0, sticky="w")
 
-        self.single_sheet_radio_btn = Radiobutton(self.save_new_option_frame, text="Single Sheet(for mass evaluation)",
+        self.single_sheet_radio_btn = Radiobutton(self.save_new_option_frame, text=c.SINGLE_SHEET_RADIO_BTN_TEXT,
                                                   variable=self.sheet_selection, value=1)
         self.single_sheet_radio_btn.grid(row=1, column=0, sticky="w", padx=5)
 
-        self.multi_sheet_radio_btn = Radiobutton(self.save_new_option_frame,
-                                                 text="Multiple Sheet(Cleaner format for user view)",
+        self.multi_sheet_radio_btn = Radiobutton(self.save_new_option_frame, text=c.MULTI_SHEET_RADIO_BTN_TEXT,
                                                  variable=self.sheet_selection, value=2)
         self.multi_sheet_radio_btn.grid(row=1, column=1, sticky="w", padx=5)
 
-        self.save_filename_label = Label(self.save_new_option_frame, text="Enter File Name", anchor=E)
+        self.save_filename_label = Label(self.save_new_option_frame, text=c.SAVE_FILENAME_TEXT, anchor=E)
         self.save_filename_label.grid(row=2, column=0, sticky="w")
 
         self.save_filename_field = Entry(self.save_new_option_frame, width=50, borderwidth=5)
         self.save_filename_field.grid(row=3, column=0, sticky="w", padx=5, columnspan=2)
 
-        self.select_save_location_label = Label(self.save_new_option_frame, text="Select Save Location", anchor=E)
+        self.select_save_location_label = Label(self.save_new_option_frame, text=c.SELECT_SAVE_LOCATION_TEXT, anchor=E)
         self.select_save_location_label.grid(row=4, column=0, sticky="w")
-        self.browse_folder_btn = Button(self.save_new_option_frame, text="Browse Folder", borderwidth=5,
-                                        activebackground="lightgreen", command=self.browse_folder)
+
+        self.browse_folder_btn = Button(self.save_new_option_frame, text=c.BROWSE_FOLDER_BTN_TEXT, borderwidth=5,
+                                        activebackground=c.BTN_ACTIVE_BG_COLOR, command=self.browse_folder)
         self.browse_folder_btn.grid(row=4, column=1, padx=5, pady=5)
         self.save_location_path_label = Label(self.save_new_option_frame, text=self.folder_path, borderwidth=2,
                                               relief="solid", anchor="w")
         self.save_location_path_label.grid(row=5, column=0, columnspan=2, padx=5, pady=5, sticky="ew")
 
-        self.save_btn = Button(self.save_new_option_frame, text="Save", borderwidth=5,
-                               activebackground="lightgreen", padx=10, command=self.save_btn_command)
+        self.save_btn = Button(self.save_new_option_frame, text=c.SAVE_BTN_TEXT, borderwidth=5,
+                               activebackground=c.BTN_ACTIVE_BG_COLOR, padx=10, command=self.save_btn_command)
         self.save_btn.grid(row=6, column=1, padx=5, pady=5, sticky="e")
 
         # Append to existing file option
         self.append_option_frame = Frame(self.excel_ui_root)
 
-        self.select_file_to_append_label = Label(self.append_option_frame, text="Select File To Add Data", anchor=E)
+        self.select_file_to_append_label = Label(self.append_option_frame, text=c.SELECT_FILE_TO_APPEND_BTN_TEXT,
+                                                 anchor=E)
         self.select_file_to_append_label.grid(row=0, column=0, sticky="w")
 
-        self.choose_file_to_append_btn = Button(self.append_option_frame, text="Choose File", borderwidth=5,
-                                                activebackground="lightgreen", command=self.open_excel_file)
+        self.choose_file_to_append_btn = Button(self.append_option_frame, text=c.CHOOSE_BTN_TEXT, borderwidth=5,
+                                                activebackground=c.BTN_ACTIVE_BG_COLOR, command=self.open_excel_file)
         self.choose_file_to_append_btn.grid(row=0, column=1, padx=5, pady=5)
         self.file_to_append_path_label = Label(self.append_option_frame, borderwidth=2, relief="solid", anchor="w")
         self.file_to_append_path_label.grid(row=1, column=0, columnspan=2, padx=5, pady=5, sticky="ew")
 
-        self.select_save_location_label = Label(self.append_option_frame, text="Select Save Location (optional)",
+        self.select_save_location_label = Label(self.append_option_frame, text=c.SELECT_SAVE_LOCATION_OPTIONAL_TEXT,
                                                 anchor=E)
         self.select_save_location_label.grid(row=2, column=0, sticky="w")
-        self.browse_folder_btn = Button(self.append_option_frame, text="Browse Folder", borderwidth=5,
-                                        activebackground="lightgreen", command=self.browse_folder)
+        self.browse_folder_btn = Button(self.append_option_frame, text=c.BROWSE_FOLDER_BTN_TEXT, borderwidth=5,
+                                        activebackground=c.BTN_ACTIVE_BG_COLOR, command=self.browse_folder)
         self.browse_folder_btn.grid(row=2, column=1, padx=5, pady=5)
         self.new_save_location_path_label = Label(self.append_option_frame, text=self.new_folder_path, borderwidth=2,
                                                   relief="solid", anchor="w")
         self.new_save_location_path_label.grid(row=3, column=0, columnspan=2, padx=5, pady=5, sticky="ew")
 
-        self.save_btn = Button(self.append_option_frame, text="Save", borderwidth=5,
-                               activebackground="lightgreen", padx=10, command=self.save_btn_command)
+        self.save_btn = Button(self.append_option_frame, text=c.SAVE_BTN_TEXT, borderwidth=5,
+                               activebackground=c.BTN_ACTIVE_BG_COLOR, padx=10, command=self.save_btn_command)
         self.save_btn.grid(row=4, column=1, padx=5, pady=5, sticky="e")
 
     def run_excel_view(self):
@@ -288,7 +296,7 @@ class ExcelView:
             self.new_save_location_path_label.config(text=self.new_folder_path)
 
     def open_excel_file(self):
-        self.excel_file = filedialog.askopenfilename(title="Select a File",
+        self.excel_file = filedialog.askopenfilename(title=c.CHOOSE_FILE_DIALOG_TEXT,
                                                      filetypes=(("Excel files", "*.xlsx;*.xls"),))
         self.file_to_append_path_label.config(text=self.excel_file)
 
@@ -332,13 +340,53 @@ class ExcelView:
                 if self.get_save_filename().strip():
                     self.excel_ui_root.destroy()
                 else:
-                    self.excel_ui_warning_label.config(text="Please enter your filename before proceeding.")
+                    self.excel_ui_warning_label.config(text=c.EXCEL_UI_SAVE_FILENAME_WARNING_TEXT)
             else:
-                self.excel_ui_warning_label.config(text="Please select a Saving Format to proceed!")
+                self.excel_ui_warning_label.config(text=c.EXCEL_UI_SAVE_FORMAT_WARNING_TEXT)
         elif self.get_save_option_selection() == 2:
             if self.get_excel_file() is None:
-                self.excel_ui_warning_label.config(text="Please select a excel file to append into.")
+                self.excel_ui_warning_label.config(text=c.EXCEL_UI_APPEND_FILE_WARNING_TEXT)
             else:
                 self.excel_ui_root.destroy()
         else:
-            self.excel_ui_warning_label.config(text="Please select a Save option to proceed!")
+            self.excel_ui_warning_label.config(text=c.EXCEL_UI_SAVE_OPTION_WARNING_TEXT)
+
+    def on_closing(self):
+        if messagebox.askokcancel("Quit", "Do you want to quit?"):
+            self.excel_ui_root.destroy()
+
+
+class ExitView:
+    def __init__(self):
+        self.exit_ui_root = Tk()
+        self.exit_primary_heading = None
+        self.scan_more_btn = None
+        self.exit_btn = None
+
+    def create_exit_view(self, app_function):
+        self.exit_ui_root.title(c.OCR_TITLE)
+        self.exit_ui_root.geometry(c.EXIT_WINDOW_SIZE)
+
+        self.exit_primary_heading = Label(self.exit_ui_root, text=c.EXIT_UI_PRIMARY_HEADING,
+                                          anchor=E)
+        self.exit_primary_heading.grid(row=0, column=0, sticky="w", pady=5)
+
+        self.scan_more_btn = Button(self.exit_ui_root, text=c.SCAN_MORE_BTN_TEXT, borderwidth=5,
+                                    activebackground=c.BTN_ACTIVE_BG_COLOR, padx=10,
+                                    command=lambda: self.scan_more_command(app_function))
+        self.scan_more_btn.grid(row=1, column=0, padx=5, pady=5, sticky="e")
+
+        self.exit_btn = Button(self.exit_ui_root, text=c.EXIT_BTN_TEXT, borderwidth=5,
+                               activebackground=c.BTN_ACTIVE_BG_COLOR, padx=10, command=self.exit_command)
+        self.exit_btn.grid(row=1, column=1, padx=5, pady=5, sticky="e")
+
+    def run_exit_view(self):
+        self.exit_ui_root.mainloop()
+
+    def scan_more_command(self, app_function):
+        self.exit_ui_root.destroy()
+        app_function()
+
+    def exit_command(self):
+        if messagebox.askokcancel("Quit", "Do you want to quit?"):
+            self.exit_ui_root.destroy()
