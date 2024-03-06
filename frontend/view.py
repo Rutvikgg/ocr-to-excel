@@ -2,6 +2,7 @@
 This is where we implement our UI using tkinter
 This file has the MainView class
 """
+from pathlib import Path
 from tkinter import Tk, Label, ttk, Button, filedialog, LabelFrame, StringVar, Radiobutton, IntVar, Entry, Frame
 from tkinter.constants import E, W
 
@@ -146,6 +147,8 @@ class ExcelView:
         self.excel_ui_root = Tk()
         self.save_option_selection = IntVar()
         self.sheet_selection = IntVar()
+        self.append_option_frame = None
+        self.save_new_option_frame = None
         self.excel_primary_heading = None
         self.excel_primary_heading_seperator = None
         self.success_msg_label = None
@@ -153,8 +156,6 @@ class ExcelView:
         self.save_new_radio_btn = None
         self.append_radio_btn = None
         self.save_filename = None
-        self.append_option_frame = None
-        self.save_new_option_frame = None
         self.saving_format_label = None
         self.single_sheet_radio_btn = None
         self.multi_sheet_radio_btn = None
@@ -169,8 +170,10 @@ class ExcelView:
         self.choose_file_to_append_btn = None
         self.select_file_to_append_label = None
         self.save_option_seperator = None
-        self.folder_path = None
+        documents_path = Path.home() / "Documents"
+        self.folder_path = str(documents_path)
         self.save_btn = None
+        self.excel_ui_warning_label = None
 
     def create_excel_view(self):
         self.excel_ui_root.title(c.OCR_TITLE)
@@ -199,6 +202,9 @@ class ExcelView:
 
         self.save_option_seperator = ttk.Separator(self.excel_ui_root, orient="horizontal")
         self.save_option_seperator.grid(row=6, column=0, sticky="ew", columnspan=2, pady=5)
+
+        self.excel_ui_warning_label = Label(self.excel_ui_warning_label, text="", fg=c.WARNING_TEXT_COLOR)
+        self.excel_ui_warning_label.grid(row=8, column=0, columnspan=3)
 
         # Different GUI depending on Save option
 
@@ -232,7 +238,7 @@ class ExcelView:
         self.save_location_path_label.grid(row=5, column=0, columnspan=2, padx=5, pady=5, sticky="ew")
 
         self.save_btn = Button(self.save_new_option_frame, text="Save", borderwidth=5,
-                               activebackground="lightgreen", padx=10, )
+                               activebackground="lightgreen", padx=10, command=self.save_btn_command)
         self.save_btn.grid(row=6, column=1, padx=5, pady=5, sticky="e")
 
         # Append to existing file option
@@ -258,7 +264,7 @@ class ExcelView:
         self.new_save_location_path_label.grid(row=3, column=0, columnspan=2, padx=5, pady=5, sticky="ew")
 
         self.save_btn = Button(self.append_option_frame, text="Save", borderwidth=5,
-                               activebackground="lightgreen", padx=10, )
+                               activebackground="lightgreen", padx=10, command=self.save_btn_command)
         self.save_btn.grid(row=4, column=1, padx=5, pady=5, sticky="e")
 
     def run_excel_view(self):
@@ -298,3 +304,26 @@ class ExcelView:
 
     def get_folder(self):
         return self.folder_path
+
+    def store_save_filename(self):
+        self.save_filename = self.save_filename_field.get()
+
+    def save_btn_command(self):
+        self.store_save_filename()
+        self.excel_ui_warning_label.config(text="")
+
+        if self.get_save_option_selection() == 1:
+            if self.get_sheet_selection() == 1 or self.get_sheet_selection() == 2:
+                if self.get_save_filename().strip():
+                    pass
+                else:
+                    self.excel_ui_warning_label.config(text="Please enter your filename before proceeding.")
+            else:
+                self.excel_ui_warning_label.config(text="Please select a Saving Format to proceed!")
+
+        elif self.get_save_option_selection() == 2:
+            pass
+        else:
+            self.excel_ui_warning_label.config(text="Please select a Save option to proceed!")
+        print(self.get_save_filename())
+        print(self.folder_path)

@@ -51,10 +51,10 @@ def run() -> None:
     """
 
 
-v = ExcelView()
-v.create_excel_view()
-v.run_excel_view()
+# v = ExcelView()
+# v.create_excel_view()
+# v.run_excel_view()
 
 
-# if __name__ == '__main__':
-#     run()
+if __name__ == '__main__':
+    run()
