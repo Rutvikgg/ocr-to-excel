@@ -8,7 +8,7 @@ root = Tk()
 root.title("OCR To Excel")
 root.geometry("600x725")
 
-# main_ui_root.iconbitmap("")
+root.iconbitmap("../frontend/images/exit_ui_logo.ico")
 def open():
     global my_image
     global my_image_label

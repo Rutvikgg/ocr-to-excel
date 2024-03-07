@@ -134,7 +134,7 @@ class ExcelWriter:
         workbook.save(save_location)
 
     @staticmethod
-    def is_wb_single_sheet(wb_location):
+    def is_wb_single_sheet(wb_location: str) -> bool:
         workbook = load_workbook(wb_location)
         sheets = workbook.sheetnames
         if c.SINGLE_SHEET_TITLE in sheets:

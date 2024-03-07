@@ -45,6 +45,7 @@ class MainView:
         # Basic definitions of gui window
         self.main_ui_root.title(c.OCR_TITLE)
         self.main_ui_root.geometry(c.MAIN_WINDOW_SIZE)
+        self.main_ui_root.iconbitmap("./frontend/images/main_ui_logo.ico")
 
         # Main Heading
         self.main_ui_primary_heading = Label(self.main_ui_root, text=c.MAIN_UI_PRIMARY_HEADING, padx=10, pady=5,
@@ -144,13 +145,13 @@ class MainView:
         else:
             self.main_ui_root.destroy()  # Close the GUI
 
-    def on_closing(self):
+    def on_closing(self) -> None:
         if messagebox.askokcancel("Quit", "Do you want to quit?"):
             self.main_ui_root.destroy()
 
 
 class ExcelView:
-    def __init__(self):
+    def __init__(self) -> None:
         self.excel_ui_root = Tk()
         self.save_option_selection = IntVar()
         self.sheet_selection = IntVar()
@@ -184,9 +185,10 @@ class ExcelView:
         self.excel_ui_warning_label = None
         self.excel_ui_root.protocol("WM_DELETE_WINDOW", self.on_closing)
 
-    def create_excel_view(self):
+    def create_excel_view(self) -> None:
         self.excel_ui_root.title(c.OCR_TITLE)
         self.excel_ui_root.geometry(c.EXCEL_WINDOW_SIZE)
+        self.excel_ui_root.iconbitmap("./frontend/images/excel_ui_logo.ico")
 
         self.excel_primary_heading = Label(self.excel_ui_root, text=c.EXCEL_UI_PRIMARY_HEADING, anchor=E)
         self.excel_primary_heading.grid(row=0, column=0, sticky="w", pady=5)
@@ -277,10 +279,10 @@ class ExcelView:
                                activebackground=c.BTN_ACTIVE_BG_COLOR, padx=10, command=self.save_btn_command)
         self.save_btn.grid(row=4, column=1, padx=5, pady=5, sticky="e")
 
-    def run_excel_view(self):
+    def run_excel_view(self) -> None:
         self.excel_ui_root.mainloop()
 
-    def save_option_command(self):
+    def save_option_command(self) -> None:
         if self.get_save_option_selection() == 1:
             self.save_new_option_frame.grid(row=7, column=0, padx=10, pady=10)
             self.append_option_frame.grid_forget()
@@ -288,50 +290,50 @@ class ExcelView:
             self.append_option_frame.grid(row=7, column=0, padx=10, pady=10)
             self.save_new_option_frame.grid_forget()
 
-    def browse_folder(self):
+    def browse_folder(self) -> None:
         self.folder_path = self.new_folder_path = filedialog.askdirectory()
         if self.get_save_option_selection() == 1:
             self.save_location_path_label.config(text=self.folder_path)
         elif self.get_save_option_selection() == 2:
             self.new_save_location_path_label.config(text=self.new_folder_path)
 
-    def open_excel_file(self):
+    def open_excel_file(self) -> None:
         self.excel_file = filedialog.askopenfilename(title=c.CHOOSE_FILE_DIALOG_TEXT,
                                                      filetypes=(("Excel files", "*.xlsx;*.xls"),))
         self.file_to_append_path_label.config(text=self.excel_file)
 
-    def get_save_option_selection(self):
+    def get_save_option_selection(self) -> int:
         return self.save_option_selection.get()
 
-    def get_excel_file(self):
+    def get_excel_file(self) -> str:
         return self.excel_file
 
-    def get_sheet_selection(self):
+    def get_sheet_selection(self) -> int:
         return self.sheet_selection.get()
 
-    def get_save_filename(self):
+    def get_save_filename(self) -> str:
         return self.save_filename.strip()
 
-    def get_folder(self):
+    def get_folder(self) -> str:
         return self.folder_path
 
-    def get_new_folder(self):
+    def get_new_folder(self) -> str:
         return self.new_folder_path
 
-    def get_save_location(self):
+    def get_save_location(self) -> str:
         return f'{self.get_folder()}/{self.get_save_filename()}.xlsx'
 
-    def get_new_save_location(self):
+    def get_new_save_location(self) -> str | None:
         if self.get_new_folder() is None:
             return None
         else:
             file_name = os.path.basename(self.get_excel_file())
             return f'{self.get_new_folder()}/{file_name}'
 
-    def store_save_filename(self):
+    def store_save_filename(self) -> None:
         self.save_filename = self.save_filename_field.get()
 
-    def save_btn_command(self):
+    def save_btn_command(self) -> None:
         self.store_save_filename()
         self.excel_ui_warning_label.config(text="")
 
@@ -351,21 +353,23 @@ class ExcelView:
         else:
             self.excel_ui_warning_label.config(text=c.EXCEL_UI_SAVE_OPTION_WARNING_TEXT)
 
-    def on_closing(self):
+    def on_closing(self) -> None:
         if messagebox.askokcancel("Quit", "Do you want to quit?"):
             self.excel_ui_root.destroy()
 
 
 class ExitView:
-    def __init__(self):
+    def __init__(self) -> None:
         self.exit_ui_root = Tk()
         self.exit_primary_heading = None
         self.scan_more_btn = None
         self.exit_btn = None
+        self.exit_ui_root.protocol("WM_DELETE_WINDOW", self.exit_command)
 
-    def create_exit_view(self, app_function):
+    def create_exit_view(self, app_function) -> None:
         self.exit_ui_root.title(c.OCR_TITLE)
         self.exit_ui_root.geometry(c.EXIT_WINDOW_SIZE)
+        self.exit_ui_root.iconbitmap("./frontend/images/exit_ui_logo.ico")
 
         self.exit_primary_heading = Label(self.exit_ui_root, text=c.EXIT_UI_PRIMARY_HEADING,
                                           anchor=E)
@@ -380,13 +384,13 @@ class ExitView:
                                activebackground=c.BTN_ACTIVE_BG_COLOR, padx=10, command=self.exit_command)
         self.exit_btn.grid(row=1, column=1, padx=5, pady=5, sticky="e")
 
-    def run_exit_view(self):
+    def run_exit_view(self) -> None:
         self.exit_ui_root.mainloop()
 
-    def scan_more_command(self, app_function):
+    def scan_more_command(self, app_function) -> None:
         self.exit_ui_root.destroy()
         app_function()
 
-    def exit_command(self):
+    def exit_command(self) -> None:
         if messagebox.askokcancel("Quit", "Do you want to quit?"):
             self.exit_ui_root.destroy()
