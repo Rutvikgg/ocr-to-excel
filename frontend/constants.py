@@ -3,10 +3,13 @@ Constants for use in MainView
 """
 
 # UI scale
-MAIN_WINDOW_SIZE: str = "600x725"
-EXCEL_WINDOW_SIZE: str = "600x600"
-EXIT_WINDOW_SIZE: str = "320x75"
+MAIN_WINDOW_SIZE: str = "635x725"
+EXCEL_WINDOW_SIZE: str = "625x600"
+EXIT_WINDOW_SIZE: str = "425x85"
 IMAGE_SIZE: tuple[int, int] = (500, 400)
+FONT_LARGE: tuple[str, int] = ("Helvetica", 16)
+FONT_MEDIUM: tuple[str, int] = ("Helvetica", 12)
+FONT_SMALL: tuple[str, int] = ("Helvetica", 10)
 
 # colors
 IMAGE_FRAME_COLOR: str = "#88D4AB"
@@ -36,7 +39,7 @@ SAVE_OPTION_TEXT: str = "How Would you like to save it"
 SAVE_NEW_RADIO_BTN_TEXT: str = "Save to new file"
 APPEND_RADIO_BTN_TEXT: str = "Add Data to existing file"
 SAVING_FORMAT_TEXT: str = "Select Saving Format"
-SINGLE_SHEET_RADIO_BTN_TEXT: str = "Single Sheet (for mass data entry.)"
+SINGLE_SHEET_RADIO_BTN_TEXT: str = "Single Sheet (for mass data entry)"
 MULTI_SHEET_RADIO_BTN_TEXT: str = "Multiple Sheet (Cleaner format for user view)"
 SAVE_FILENAME_TEXT: str = "Enter your File Name"
 SELECT_SAVE_LOCATION_TEXT: str = "Select Save Location"

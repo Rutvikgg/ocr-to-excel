@@ -7,7 +7,7 @@ from frontend.view import MainView, ExcelView, ExitView
 
 
 def run() -> None:
-    result = {}
+    global result
     print("App is Starting...")
 
     # Main GUI start

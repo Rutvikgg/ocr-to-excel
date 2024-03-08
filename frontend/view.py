@@ -49,14 +49,14 @@ class MainView:
 
         # Main Heading
         self.main_ui_primary_heading = Label(self.main_ui_root, text=c.MAIN_UI_PRIMARY_HEADING, padx=10, pady=5,
-                                             anchor=E)
+                                             anchor=E, font=c.FONT_LARGE)
         self.main_ui_primary_heading.grid(row=0, column=0, sticky="w")
 
         self.main_ui_heading_seperator = ttk.Separator(self.main_ui_root, orient="horizontal")
         self.main_ui_heading_seperator.grid(row=1, column=0, sticky="ew", columnspan=3)
 
         # Choose File
-        self.document_choose_file_label = Label(self.main_ui_root, text=c.DOCUMENT_CHOOSE_LABEL_TEXT, padx=10, pady=5)
+        self.document_choose_file_label = Label(self.main_ui_root, text=c.DOCUMENT_CHOOSE_LABEL_TEXT, padx=10, pady=5, font=c.FONT_MEDIUM)
         self.document_choose_file_label.grid(row=2, column=0, sticky="w")
 
         self.document_choose_file_label_seperator = ttk.Separator(self.main_ui_root, orient="horizontal")
@@ -64,7 +64,7 @@ class MainView:
 
         self.document_choose_file_btn = Button(self.main_ui_root, text=c.CHOOSE_BTN_TEXT,
                                                command=self.open_file_for_ocr, borderwidth=5,
-                                               activebackground=c.BTN_ACTIVE_BG_COLOR)
+                                               activebackground=c.BTN_ACTIVE_BG_COLOR, font=c.FONT_SMALL)
         self.document_choose_file_btn.grid(row=2, column=1, padx=5, pady=5)
 
         # Image Preview
@@ -74,7 +74,7 @@ class MainView:
         self.image_preview_inner_frame = LabelFrame(self.image_preview_frame, bg=c.IMAGE_FRAME_COLOR, borderwidth=1)
         self.image_preview_inner_frame.grid(row=2, column=0, columnspan=3)
         self.image_preview_path_label = Label(self.image_preview_frame, text=self.file_for_ocr, borderwidth=2,
-                                              relief="solid", anchor="w")
+                                              relief="solid", anchor="w", font=c.FONT_SMALL)
         self.image_preview_path_label.grid(row=0, column=0, columnspan=2, padx=5, pady=5, sticky="ew")
         self.image_preview = Label(self.image_preview_inner_frame, image=self.image)
         self.image_preview.grid(row=0, column=0)
@@ -83,20 +83,21 @@ class MainView:
         self.image_preview_seperator.grid(row=6, column=0, sticky="ew", columnspan=3)
 
         # Radio Selection
-        self.specify_document_label = Label(self.main_ui_root, text=c.SPECIFY_LABEL_TEXT)
+        self.specify_document_label = Label(self.main_ui_root, text=c.SPECIFY_LABEL_TEXT, font=c.FONT_MEDIUM)
         self.specify_document_label.grid(row=7, column=0, sticky="w")
 
-        self.document_description_label = Label(self.main_ui_root, text=c.DOCUMENT_RADIO_DESCRIPTION_TEXT)
+        self.document_description_label = Label(self.main_ui_root, text=c.DOCUMENT_RADIO_DESCRIPTION_TEXT, font=c.FONT_SMALL,
+                                                fg="#6c757d")
         self.document_description_label.grid(row=8, column=0)
 
         self.fd_radio_btn = Radiobutton(self.main_ui_root, text=c.FD_RADIO_BTN_TEXT,
-                                        variable=self.document_radio_selection, value="fd")
+                                        variable=self.document_radio_selection, value="fd", font=c.FONT_SMALL)
         self.fd_radio_btn.grid(row=9, column=0, sticky="w")
         self.er_radio_btn = Radiobutton(self.main_ui_root, text=c.ER_RADIO_BTN_TEXT,
-                                        variable=self.document_radio_selection, value="er")
+                                        variable=self.document_radio_selection, value="er", font=c.FONT_SMALL)
         self.er_radio_btn.grid(row=9, column=1)
         self.in_radio_btn = Radiobutton(self.main_ui_root, text=c.IN_RADIO_BTN_TEXT,
-                                        variable=self.document_radio_selection, value="in")
+                                        variable=self.document_radio_selection, value="in", font=c.FONT_SMALL)
         self.in_radio_btn.grid(row=9, column=2)
         self.fd_radio_btn.select()
 
@@ -105,7 +106,7 @@ class MainView:
 
         # Start Button
         self.start_btn = Button(self.main_ui_root, text=c.START_BTN_TEXT, borderwidth=5,
-                                activebackground=c.BTN_ACTIVE_BG_COLOR, command=self.start_conversion)
+                                activebackground="#adb5bd", command=self.start_conversion, font=c.FONT_SMALL)
         self.start_btn.grid(row=11, column=2, columnspan=1, sticky="e", padx=10, pady=10)
 
         self.main_ui_warning_label = Label(self.main_ui_root, text="", fg=c.WARNING_TEXT_COLOR)
@@ -190,26 +191,26 @@ class ExcelView:
         self.excel_ui_root.geometry(c.EXCEL_WINDOW_SIZE)
         self.excel_ui_root.iconbitmap("./frontend/images/excel_ui_logo.ico")
 
-        self.excel_primary_heading = Label(self.excel_ui_root, text=c.EXCEL_UI_PRIMARY_HEADING, anchor=E)
-        self.excel_primary_heading.grid(row=0, column=0, sticky="w", pady=5)
+        self.excel_primary_heading = Label(self.excel_ui_root, text=c.EXCEL_UI_PRIMARY_HEADING, anchor=E, font=c.FONT_LARGE)
+        self.excel_primary_heading.grid(row=0, column=0, sticky="w", pady=5, padx=10)
 
         self.excel_primary_heading_seperator = ttk.Separator(self.excel_ui_root, orient="horizontal")
         self.excel_primary_heading_seperator.grid(row=1, column=0, sticky="ew", columnspan=2, pady=5)
 
-        self.success_msg_label = Label(self.excel_ui_root, text=c.EXCEL_SUCCESS_MSG_TEXT, anchor=E)
-        self.success_msg_label.grid(row=2, column=0, sticky="w")
+        self.success_msg_label = Label(self.excel_ui_root, text=c.EXCEL_SUCCESS_MSG_TEXT, anchor=E, font=c.FONT_SMALL, fg="green")
+        self.success_msg_label.grid(row=2, column=0, sticky="w", padx=10, pady=10)
 
-        self.save_option_label = Label(self.excel_ui_root, text=c.SAVE_OPTION_TEXT, anchor=E)
-        self.save_option_label.grid(row=3, column=0, sticky="w")
+        self.save_option_label = Label(self.excel_ui_root, text=c.SAVE_OPTION_TEXT, anchor=E, font=c.FONT_MEDIUM)
+        self.save_option_label.grid(row=3, column=0, sticky="w", padx=10)
 
         self.save_new_radio_btn = Radiobutton(self.excel_ui_root, text=c.SAVE_NEW_RADIO_BTN_TEXT,
                                               variable=self.save_option_selection, value=1,
-                                              command=self.save_option_command)
-        self.save_new_radio_btn.grid(row=4, column=0, sticky="w", padx=5)
+                                              command=self.save_option_command, font=c.FONT_SMALL)
+        self.save_new_radio_btn.grid(row=4, column=0, sticky="w", padx=15)
         self.append_radio_btn = Radiobutton(self.excel_ui_root, text=c.APPEND_RADIO_BTN_TEXT,
                                             variable=self.save_option_selection, value=2,
-                                            command=self.save_option_command)
-        self.append_radio_btn.grid(row=5, column=0, sticky="w", padx=5)
+                                            command=self.save_option_command, font=c.FONT_SMALL)
+        self.append_radio_btn.grid(row=5, column=0, sticky="w", padx=15)
 
         self.save_option_seperator = ttk.Separator(self.excel_ui_root, orient="horizontal")
         self.save_option_seperator.grid(row=6, column=0, sticky="ew", columnspan=2, pady=5)
@@ -221,62 +222,62 @@ class ExcelView:
 
         # Save in new file option
         self.save_new_option_frame = Frame(self.excel_ui_root)
-        self.saving_format_label = Label(self.save_new_option_frame, text=c.SAVING_FORMAT_TEXT, anchor=E)
+        self.saving_format_label = Label(self.save_new_option_frame, text=c.SAVING_FORMAT_TEXT, anchor=E, font=c.FONT_MEDIUM)
         self.saving_format_label.grid(row=0, column=0, sticky="w")
 
         self.single_sheet_radio_btn = Radiobutton(self.save_new_option_frame, text=c.SINGLE_SHEET_RADIO_BTN_TEXT,
-                                                  variable=self.sheet_selection, value=1)
-        self.single_sheet_radio_btn.grid(row=1, column=0, sticky="w", padx=5)
+                                                  variable=self.sheet_selection, value=1, font=c.FONT_SMALL)
+        self.single_sheet_radio_btn.grid(row=1, column=0, sticky="w", padx=10, pady=10)
 
         self.multi_sheet_radio_btn = Radiobutton(self.save_new_option_frame, text=c.MULTI_SHEET_RADIO_BTN_TEXT,
-                                                 variable=self.sheet_selection, value=2)
-        self.multi_sheet_radio_btn.grid(row=1, column=1, sticky="w", padx=5)
+                                                 variable=self.sheet_selection, value=2, font=c.FONT_SMALL)
+        self.multi_sheet_radio_btn.grid(row=1, column=1, sticky="w", padx=5, pady=10)
 
-        self.save_filename_label = Label(self.save_new_option_frame, text=c.SAVE_FILENAME_TEXT, anchor=E)
+        self.save_filename_label = Label(self.save_new_option_frame, text=c.SAVE_FILENAME_TEXT, anchor=E, font=c.FONT_MEDIUM)
         self.save_filename_label.grid(row=2, column=0, sticky="w")
 
-        self.save_filename_field = Entry(self.save_new_option_frame, width=50, borderwidth=5)
+        self.save_filename_field = Entry(self.save_new_option_frame, width=50, borderwidth=5, font=c.FONT_MEDIUM, bg="#dee2e6")
         self.save_filename_field.grid(row=3, column=0, sticky="w", padx=5, columnspan=2)
 
-        self.select_save_location_label = Label(self.save_new_option_frame, text=c.SELECT_SAVE_LOCATION_TEXT, anchor=E)
+        self.select_save_location_label = Label(self.save_new_option_frame, text=c.SELECT_SAVE_LOCATION_TEXT, anchor=E, font=c.FONT_MEDIUM)
         self.select_save_location_label.grid(row=4, column=0, sticky="w")
 
         self.browse_folder_btn = Button(self.save_new_option_frame, text=c.BROWSE_FOLDER_BTN_TEXT, borderwidth=5,
-                                        activebackground=c.BTN_ACTIVE_BG_COLOR, command=self.browse_folder)
+                                        activebackground="#adb5bd", command=self.browse_folder, font=c.FONT_SMALL)
         self.browse_folder_btn.grid(row=4, column=1, padx=5, pady=5)
         self.save_location_path_label = Label(self.save_new_option_frame, text=self.folder_path, borderwidth=2,
-                                              relief="solid", anchor="w")
+                                              relief="solid", anchor="w", font=c.FONT_MEDIUM)
         self.save_location_path_label.grid(row=5, column=0, columnspan=2, padx=5, pady=5, sticky="ew")
 
         self.save_btn = Button(self.save_new_option_frame, text=c.SAVE_BTN_TEXT, borderwidth=5,
-                               activebackground=c.BTN_ACTIVE_BG_COLOR, padx=10, command=self.save_btn_command)
+                               activebackground=c.BTN_ACTIVE_BG_COLOR, padx=10, command=self.save_btn_command, font=c.FONT_SMALL)
         self.save_btn.grid(row=6, column=1, padx=5, pady=5, sticky="e")
 
         # Append to existing file option
         self.append_option_frame = Frame(self.excel_ui_root)
 
         self.select_file_to_append_label = Label(self.append_option_frame, text=c.SELECT_FILE_TO_APPEND_BTN_TEXT,
-                                                 anchor=E)
+                                                 anchor=E, font=c.FONT_MEDIUM)
         self.select_file_to_append_label.grid(row=0, column=0, sticky="w")
 
         self.choose_file_to_append_btn = Button(self.append_option_frame, text=c.CHOOSE_BTN_TEXT, borderwidth=5,
-                                                activebackground=c.BTN_ACTIVE_BG_COLOR, command=self.open_excel_file)
-        self.choose_file_to_append_btn.grid(row=0, column=1, padx=5, pady=5)
-        self.file_to_append_path_label = Label(self.append_option_frame, borderwidth=2, relief="solid", anchor="w")
+                                                activebackground="#adb5bd", command=self.open_excel_file, font=c.FONT_SMALL)
+        self.choose_file_to_append_btn.grid(row=0, column=1, padx=25, pady=5)
+        self.file_to_append_path_label = Label(self.append_option_frame, borderwidth=2, relief="solid", anchor="w", font=c.FONT_MEDIUM)
         self.file_to_append_path_label.grid(row=1, column=0, columnspan=2, padx=5, pady=5, sticky="ew")
 
         self.select_save_location_label = Label(self.append_option_frame, text=c.SELECT_SAVE_LOCATION_OPTIONAL_TEXT,
-                                                anchor=E)
+                                                anchor=E, font=c.FONT_MEDIUM)
         self.select_save_location_label.grid(row=2, column=0, sticky="w")
         self.browse_folder_btn = Button(self.append_option_frame, text=c.BROWSE_FOLDER_BTN_TEXT, borderwidth=5,
-                                        activebackground=c.BTN_ACTIVE_BG_COLOR, command=self.browse_folder)
-        self.browse_folder_btn.grid(row=2, column=1, padx=5, pady=5)
+                                        activebackground="#adb5bd", command=self.browse_folder, font=c.FONT_SMALL)
+        self.browse_folder_btn.grid(row=2, column=1, padx=30, pady=5)
         self.new_save_location_path_label = Label(self.append_option_frame, text=self.new_folder_path, borderwidth=2,
-                                                  relief="solid", anchor="w")
+                                                  relief="solid", anchor="w", font=c.FONT_MEDIUM)
         self.new_save_location_path_label.grid(row=3, column=0, columnspan=2, padx=5, pady=5, sticky="ew")
 
         self.save_btn = Button(self.append_option_frame, text=c.SAVE_BTN_TEXT, borderwidth=5,
-                               activebackground=c.BTN_ACTIVE_BG_COLOR, padx=10, command=self.save_btn_command)
+                               activebackground=c.BTN_ACTIVE_BG_COLOR, padx=10, command=self.save_btn_command, font=c.FONT_SMALL)
         self.save_btn.grid(row=4, column=1, padx=5, pady=5, sticky="e")
 
     def run_excel_view(self) -> None:
@@ -372,16 +373,16 @@ class ExitView:
         self.exit_ui_root.iconbitmap("./frontend/images/exit_ui_logo.ico")
 
         self.exit_primary_heading = Label(self.exit_ui_root, text=c.EXIT_UI_PRIMARY_HEADING,
-                                          anchor=E)
-        self.exit_primary_heading.grid(row=0, column=0, sticky="w", pady=5)
+                                          anchor=E, font=c.FONT_MEDIUM)
+        self.exit_primary_heading.grid(row=0, column=0, sticky="w", pady=5, padx=10)
 
         self.scan_more_btn = Button(self.exit_ui_root, text=c.SCAN_MORE_BTN_TEXT, borderwidth=5,
-                                    activebackground=c.BTN_ACTIVE_BG_COLOR, padx=10,
-                                    command=lambda: self.scan_more_command(app_function))
+                                    activebackground="#adb5bd", padx=10,
+                                    command=lambda: self.scan_more_command(app_function), font=c.FONT_SMALL)
         self.scan_more_btn.grid(row=1, column=0, padx=5, pady=5, sticky="e")
 
         self.exit_btn = Button(self.exit_ui_root, text=c.EXIT_BTN_TEXT, borderwidth=5,
-                               activebackground=c.BTN_ACTIVE_BG_COLOR, padx=10, command=self.exit_command)
+                               activebackground="#ffe6e6", padx=10, command=self.exit_command, font=c.FONT_SMALL)
         self.exit_btn.grid(row=1, column=1, padx=5, pady=5, sticky="e")
 
     def run_exit_view(self) -> None:
