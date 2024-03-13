@@ -15,7 +15,7 @@
 
 **Tired of Drowning in Receipts? 🌊**
 
-Say goodbye to the manual data entry abyss! Our receipt management superhero is here to save the day! 
+Say goodbye to the manual data entry abyss! Our product is documents management superhero is here to save the day! 
 
 **Unleash the Power of Automation:**
 
@@ -46,7 +46,7 @@ Say goodbye to the manual data entry abyss! Our receipt management superhero is 
 **Magical Tech Stack:**
 
 - Python (for automation and data manipulation) 🐍
-- Tesseract OCR (for text recognition) 👁️‍🗨️
+- OCR (for text recognition) 👁️‍🗨️
 - Mindee API (for advanced layout analysis) 🌐
 - openpyxl (to read/write Excel xlsx/xlsm/xltx/xltm files) 🗃️
 - Tkinter (for GUI development) 🖥️
