@@ -43,6 +43,10 @@ Say goodbye to the manual data entry abyss! Our product is documents management 
    python ocr_to_excel.py
    ```
 
+**Media**
+
+https://github.com/Rutvikgg/ocr-to-excel/assets/133527690/2ddf89cd-be7e-496c-9c3b-f5be7f4f2083
+
 **Magical Tech Stack:**
 
 - Python (for automation and data manipulation) 🐍
