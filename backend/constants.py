@@ -4,7 +4,7 @@ Constants for ocr and excel reader & writer
 from openpyxl.styles import Font
 
 # OCR constants
-API_KEY: str = "da251ff94888f0bda69aafd199f12179"
+API_KEY: str = "Mindee_API_KEY"
 
 # EXCEL WRITER constants
 SINGLE_SHEET_TITLE: str = "Extracted Data"
